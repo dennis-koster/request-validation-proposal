@@ -4,32 +4,60 @@ declare(strict_types=1);
 
 namespace App\Books;
 
+use App\Authors\AuthorRepository;
+
 class BookController
 {
     /**
-     * @param CreateBookRequest $request
-     * @param BookBuilder       $builder
+     * @var BookRepository
      */
-    public function create(CreateBookRequest $request, BookBuilder $builder)
+    protected $bookRepository;
+
+    /**
+     * @var AuthorRepository
+     */
+    protected $authorRepository;
+
+    /**
+     * @param BookRepository   $bookRepository
+     * @param AuthorRepository $authorRepository
+     */
+    public function __construct(BookRepository $bookRepository, AuthorRepository $authorRepository)
     {
-        $book = $builder->build($request->getBuilderData());
-
-        // $repository->persist($book)
-
-        // return Response::json(['data' => $transformer->transform($book), 'meta' => [pagination]])
-        // return $transformer->transform($book)
+        $this->bookRepository = $bookRepository;
+        $this->authorRepository = $authorRepository;
     }
 
-    public function update(PatchBookRequest $request, BookRepository $bookRepository, string $bookId)
+
+    /**
+     * @param CreateBookRequest $request
+     */
+    public function create(CreateBookRequest $request)
     {
-        $builderData = $request->getBuilderData();
+        $data = $request->getMappedData();
+
+        // Create the author first
+        if (isset($data['author'])) {
+            $author = $this->authorRepository->create($data['author']);
+            $data['author_id'] = $author->getId();
+        }
+
+        // Create the book
+        $book = $this->bookRepository->create($data);
+
+        // return Response::json(['data' => $transformer->transform($book), 'meta' => [pagination]])
+    }
+
+    public function update(PatchBookRequest $request, BookRepository $bookRepository, AuthorRepository $authorRepository, string $bookId)
+    {
+        $builderData = $request->getMappedData();
         $book = $bookRepository->findOrFail($bookId);
 
         if (isset($builderData['author'])) {
             $authorRepository->update($builderData['author'], $book->getAuthor());
         }
 
-        $bookRepository->update($request->getBuilderData(), $book);
+        $bookRepository->update($request->getMappedData(), $book);
 
         // return Response::json(['data' => $transformer->transform($book), 'meta' => [pagination]])
     }

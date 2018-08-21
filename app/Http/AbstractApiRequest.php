@@ -163,6 +163,15 @@ abstract class AbstractApiRequest extends FormRequest
     abstract protected function validateResource(): self;
 
     /**
+     * The data to be passed to a repository instance. In the case
+     * of a patch request, it can return the id of the resource
+     * so it does not have to be fetched again.
+     *
+     * @return array
+     */
+    abstract protected function getMappedData(): array;
+
+    /**
      * @return array
      */
     public function rules(): array

@@ -2,6 +2,7 @@
 
 namespace App\Books;
 
+use App\Http\AbstractApiRequest;
 use Symfony\Component\Translation\Exception\InvalidResourceException;
 
 class PatchBookRequest extends AbstractApiRequest
@@ -29,18 +30,20 @@ class PatchBookRequest extends AbstractApiRequest
     }
 
     /**
-     * The data to be passed to a builder instance. In the case
+     * The data to be passed to a repository instance. In the case
      * of a patch request, it can return the id of the resource
      * so it does not have to be fetched again.
      *
      * @return array
      */
-    public function getBuilderData(): array
+    public function getMappedData(): array
     {
         return [
-            'book_id' => $this->get('id'),
-            'author' => $this->get('author'),
-            // etc
+            'book_id'   => $this->get('id'),
+            'name'      => $this->get('name'),
+            'year'      => $this->get('year'),
+            'author'    => $this->get('author'),
+            'author_id' => $this->get('author_id'),
         ];
     }
 
