@@ -50,14 +50,14 @@ class BookController
 
     public function update(PatchBookRequest $request, BookRepository $bookRepository, AuthorRepository $authorRepository, string $bookId)
     {
-        $builderData = $request->getMappedData();
+        $data = $request->getMappedData();
         $book = $bookRepository->findOrFail($bookId);
 
-        if (isset($builderData['author'])) {
-            $authorRepository->update($builderData['author'], $book->getAuthor());
+        if (isset($data['author'])) {
+            $authorRepository->update($data['author'], $book->getAuthor());
         }
 
-        $bookRepository->update($request->getMappedData(), $book);
+        $bookRepository->update($data, $book);
 
         // return Response::json(['data' => $transformer->transform($book), 'meta' => [pagination]])
     }

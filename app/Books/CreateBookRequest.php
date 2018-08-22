@@ -19,6 +19,19 @@ class CreateBookRequest extends AbstractApiRequest
     }
 
     /**
+     * Check whether the combination of resource attributes
+     * given is valid. For instance, does the selected
+     * region match the selected service contract.
+     *
+     * @throws InvalidResourceException
+     * @return $this
+     */
+    protected function validateResource(): AbstractApiRequest
+    {
+        // TODO: Implement validateResource() method.
+    }
+
+    /**
      * Return the path of the JSON schema that belongs
      * to the request.
      *
@@ -45,18 +58,5 @@ class CreateBookRequest extends AbstractApiRequest
             'author'    => $this->get('author'),
             'author_id' => $this->get('author_id'),
         ];
-    }
-
-    /**
-     * Check whether the combination of resource attributes
-     * given is valid. For instance, does the selected
-     * region match the selected service contract.
-     *
-     * @throws InvalidResourceException
-     * @return $this
-     */
-    protected function validateResource(): AbstractApiRequest
-    {
-        // TODO: Implement validateResource() method.
     }
 }

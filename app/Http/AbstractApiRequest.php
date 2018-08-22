@@ -169,7 +169,7 @@ abstract class AbstractApiRequest extends FormRequest
      *
      * @return array
      */
-    abstract protected function getMappedData(): array;
+    abstract public function getMappedData(): array;
 
     /**
      * @return array
